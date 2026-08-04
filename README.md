@@ -31,8 +31,10 @@ that file changes. The `dashboard/` and `calibration/` folders provide both prog
 
 ```
 CIRCUITPY/
-  code.py      the program that runs: the dashboard or the calibration tool
-  lib/         the libraries included in this repository
+  code.py               the program the CLUE runs, a copy of dashboard/code.py
+  dashboard/code.py     the dashboard
+  calibration/code.py   the compass calibration tool
+  lib/                  the libraries from this repository
 ```
 
 ## What you need
