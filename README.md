@@ -22,15 +22,22 @@ repository's own display code.*
 | Brightness | The screen backlight level, set automatically from room light |
 | Acceleration | Motion readout in green: the overall strength, then the signed x;y;z values |
 
-## Highlights
+## How the CLUE runs code
 
-* Smooth and fast: the screen only redraws what actually changed.
-* A compass that works however you hold it: flat on a table or upright in
-  front of you, the number is the direction you are facing.
-* Colours shift with conditions so you can read the room at a glance.
-* The backlight follows room light; button A dims, button B brightens, both
-  together return to automatic.
-* Loudness is measured the way a sound level meter does it.
+Plugged into a computer, the CLUE appears as a small USB drive named
+CIRCUITPY. There is no upload step: the board simply runs the file named
+`code.py` at the top level of that drive, and restarts on its own whenever
+that file changes. Since only one file can have that name, only one program
+is ever installed at a time, and this repository ships both of its programs
+already named `code.py` (the dashboard at the top level, the calibration
+tool in `calibration/`). Copying one onto the drive replaces the other, and
+nothing ever needs renaming.
+
+```
+CIRCUITPY/
+  code.py      the program that runs: the dashboard or the calibration tool
+  lib/         the libraries listed below
+```
 
 ## What you need
 
@@ -43,34 +50,38 @@ repository's own display code.*
 
 ## Setup
 
-1. Copy `code.py` and `mag_cal.py` to the CIRCUITPY drive and install the
-   libraries above.
-2. Calibrate the compass once (next section) and enter the printed offsets
-   in `code.py`.
-3. That is it: the dashboard starts on power-up.
+1. Copy the libraries above into `CIRCUITPY/lib`.
+2. Copy this repository's `code.py` to the top level of CIRCUITPY. The
+   dashboard starts by itself.
+3. Calibrate the compass once (next section). Until then, every reading
+   except the compass is already correct.
 
 ## Compass calibration
 
-Every board carries a small constant magnetic field of its own, strong enough
-to swamp the Earth's field, so the compass needs a one-minute calibration
-before its numbers mean anything.
+Every board carries a small constant magnetic field of its own, strong
+enough to swamp the Earth's field, so the compass needs a one-minute
+calibration before its numbers mean anything.
 
 ![Calibration converging](assets/mag_cal.png)
 *Left to right: the start of a tumble, part-way through, and converged with
 all three spans equal. Below: the offsets printed over serial as they settle.*
 
-1. Start the tool: connect to the serial console, press Ctrl-C, and type
-   `import mag_cal` (or temporarily rename `mag_cal.py` to `code.py`).
+1. Copy `calibration/code.py` to the top level of CIRCUITPY. It replaces
+   the dashboard, since the two share the name, and starts by itself.
 2. Away from metal and cables, slowly tumble the board through every
-   orientation. The `s` numbers show how much of the field each axis has
-   seen; you are done when all three roughly agree, around 95 to 110 here.
-3. Press B to freeze, copy the printed `MAG_OFFSET = (...)` line into
-   `code.py`, and reload with Ctrl-D.
-4. Optional: set `MAG_HEADING_OFFSET` to your local magnetic declination so
-   the compass reads true north rather than magnetic north.
+   orientation. The three `s` numbers show how much of the field each axis
+   has seen; you are done when they roughly agree, around 95 to 110.
+3. Press B to freeze, and note the three `o` numbers on the screen: those
+   are your offsets. Over a serial console the tool also prints them as a
+   ready-to-paste `MAG_OFFSET = (...)` line.
+4. In your copy of the dashboard `code.py`, set `MAG_OFFSET` to those three
+   numbers, then copy the file back onto the drive. It replaces the
+   calibration tool, and the compass now reads correctly. Optional: set
+   `MAG_HEADING_OFFSET` to your local magnetic declination so it shows true
+   north rather than magnetic north.
 
-Each board needs its own offsets; numbers from one unit will not be right on
-another.
+Each board needs its own offsets; numbers from one unit will not be right
+on another.
 
 ## How the compass works
 

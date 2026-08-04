@@ -95,7 +95,8 @@ ACC_G = 9.81         # m/s^2, gate reference for the gravity filter
 
 # ----------------------------------------------------------------------------
 # Magnetometer calibration. MAG_OFFSET is the per-unit hard-iron offset in
-# uT, measured with mag_cal.py and subtracted from all three raw field
+# uT, measured with the calibration tool (calibration/code.py in this
+# repository) and subtracted from all three raw field
 # components; the tilt compensation uses the full corrected vector. The
 # offset vector competes with the roughly 16 uT horizontal Earth field at
 # this latitude, so the heading is meaningless without it.
@@ -104,7 +105,7 @@ ACC_G = 9.81         # m/s^2, gate reference for the gravity filter
 # local declination (about +15.3 deg East in Victoria, BC) so the display
 # reads true rather than magnetic bearings.
 # ----------------------------------------------------------------------------
-MAG_OFFSET = (-6.83, 18.31, 23.68)   # uT, measured with mag_cal.py
+MAG_OFFSET = (-6.83, 18.31, 23.68)   # uT, from the calibration tool
 MAG_HEADING_OFFSET = 15.3            # deg; includes the East declination
 
 # ----------------------------------------------------------------------------
