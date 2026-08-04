@@ -45,39 +45,38 @@ CIRCUITPY/
 
 ## Setup
 
-1. Copy this repository's `lib` folder to the top level of CIRCUITPY.
-2. Copy this repository's `code.py` to the top level of CIRCUITPY. The
-   dashboard starts by itself.
-3. Calibrate the compass once (next section). Until then, every reading
-   except the compass is already correct.
+1. Open the CIRCUITPY drive and clear it. The board recreates its own
+   housekeeping files, such as `boot_out.txt`; ignore those.
+2. Copy the files and folders in the list above onto the drive.
+3. The dashboard starts by itself. Calibrate the compass once (next
+   section); until then, every reading except the compass is correct.
 
 ## Compass calibration
 
 Every board carries a small constant magnetic field of its own, strong
-enough to swamp the Earth's field, so the compass needs a one-minute
+enough to contaminate the Earth's field, so the compass needs a one-time
 calibration before its readings mean anything.
 
 <p align="center">
   <img src="assets/mag_cal.png" alt="Calibration converging">
 </p>
-<p align="center"><em>Left to right: the start of a tumble, part-way through, and converged with all three spans equal. Below: the offsets printed over serial as they settle.</em></p>
+<p align="center"><em>Left to right: the start of a tumble; part-way through; and converged with all three spans equal. Below: the offsets printed over serial as they settle.</em></p>
 
-1. Copy `calibration/code.py` to the top level of CIRCUITPY. It replaces
-   the dashboard, since the two share the name, and starts by itself.
+1. Copy `calibration/code.py` to the top level of CIRCUITPY, replacing the
+   dashboard. The tool starts by itself.
 2. Away from metal and cables, slowly tumble the board through every
-   orientation. The three `s` numbers show how much of the field each axis
-   has seen; you are done when they roughly agree, around 95 to 110.
-3. Press B to freeze, and note the three `o` numbers on the screen: those
-   are your offsets. Over a serial console the tool also prints them as a
-   ready-to-paste `MAG_OFFSET = (...)` line.
-4. In your copy of the dashboard `code.py`, set `MAG_OFFSET` to those three
-   numbers, then copy the file back onto the drive. It replaces the
-   calibration tool. Then align the heading: point the CLUE and a phone
-   compass in the same direction, and add the difference, phone reading
-   minus CLUE reading, to `MAG_HEADING_OFFSET` in `code.py`.
+   orientation. The three `s` numbers are the field span each axis has
+   seen; you are done when all three roughly agree, around 95 to 110.
+3. Press B to freeze. The three `o` numbers on screen are your offsets;
+   a serial console shows the same values as a ready-to-paste
+   `MAG_OFFSET = (...)` line, printed once per second.
+4. Enter the offsets in `dashboard/code.py` under `MAG_OFFSET`, then copy
+   that file to the top level, replacing the calibration tool.
+5. Align the heading: point the CLUE and a phone compass in the same
+   direction, and add the difference, phone reading minus CLUE reading,
+   to `MAG_HEADING_OFFSET`.
 
-Each board needs its own offsets; numbers from one unit are likely not to be correct
-on another.
+Each board needs its own offsets; they unfortunately do not transfer.
 
 ## How the compass works
 
