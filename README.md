@@ -39,12 +39,9 @@ CIRCUITPY/
 
 ## What you need
 
-* An Adafruit CLUE running CircuitPython 7.0 or newer.
-* The libraries in this repository's `lib/` folder. They are the exact
-  working set from Adafruit's MIT-licensed
-  [library bundle](https://circuitpython.org/libraries), so nothing needs
-  downloading; on a much newer CircuitPython, fetch the same libraries from
-  the bundle built for that version.
+* An Adafruit CLUE running CircuitPython 7.0 or newer (boards ship with it installed).
+* The files and folders in the list above, all in this repository, libraries included.
+* Optional: an editor with a serial console, such as Mu, to read the calibration printout.
 
 ## Setup
 
