@@ -111,6 +111,6 @@ The main knobs, all named constants at the top of `code.py`:
 
 ## License
 
-MIT, based on the original Adafruit CLUE example by ladyada for Adafruit
-Industries. The `lib/` folder contains unmodified libraries from the Adafruit
-CircuitPython bundle, which are also MIT licensed. See `LICENSE`.
+Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0): share and
+adapt with credit, no commercial use. Everything in `lib/` remains MIT
+licensed by Adafruit Industries. See `LICENSE`.

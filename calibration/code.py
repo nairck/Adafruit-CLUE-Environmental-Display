@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Adam B. Johnson
+# SPDX-License-Identifier: CC-BY-NC-4.0
+#
 # Magnetometer hard-iron calibration tool for the Adafruit CLUE.
 #
 # Usage: this file is already named code.py in the repository's calibration
@@ -86,7 +89,7 @@ while True:
         cz = m[2] - off[2]
         mag_raw = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2])
         mag_cal = sqrt(cx * cx + cy * cy + cz * cz)
-        hdg = degrees(atan2(cx, cy)) % 360.0
+        hdg = degrees(atan2(-cx, cy)) % 360.0
         d[1].text = "x o{:7.1f} s{:6.1f}".format(off[0], spans[0])
         d[2].text = "y o{:7.1f} s{:6.1f}".format(off[1], spans[1])
         d[3].text = "z o{:7.1f} s{:6.1f}".format(off[2], spans[2])

@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 Adam B. Johnson
+# SPDX-License-Identifier: CC-BY-NC-4.0
 #
 # Adafruit CLUE sensor dashboard.
 #
@@ -108,7 +108,7 @@ ACC_G = 9.81         # m/s^2, gate reference for the gravity filter
 # true-versus-magnetic difference in the reference.
 # ----------------------------------------------------------------------------
 MAG_OFFSET = (-6.83, 18.31, 23.68)   # uT, from the calibration tool
-MAG_HEADING_OFFSET = 160.0           # deg; set against a reference compass
+MAG_HEADING_OFFSET = 0.0             # deg; set against a reference compass
 
 # ----------------------------------------------------------------------------
 # Screen-referenced heading. The compass forward axis follows the screen,
