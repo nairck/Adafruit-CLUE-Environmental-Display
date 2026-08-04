@@ -6,6 +6,7 @@ pressure, sound level, a working compass, motion, and brightness, all colour cod
 
 <p align="center">
   <img src="assets/dashboard.png" alt="Dashboard in three conditions">
+</p>
 <p align="center"><em>Left to right: a cold dry day at low pressure; typical indoor conditions; and a hot humid day at high pressure.</em></p>
 
 ## What is on screen
@@ -65,7 +66,8 @@ calibration before its readings mean anything.
 
 <p align="center">
   <img src="assets/mag_cal.png" alt="Calibration converging">
-<p align="center"><em>Left to right: the start of a tumble; part-way through; and converged with all three spans equal. Below: the offsets printed over serial as they settle.</em></p>
+</p>
+<p align="center"><em>Left to right: the start of a tumble, part-way through, and converged with all three spans equal. Below: the offsets printed over serial as they settle.</em></p>
 
 1. Copy `calibration/code.py` to the top level of CIRCUITPY. It replaces
    the dashboard, since the two share the name, and starts by itself.
@@ -77,11 +79,11 @@ calibration before its readings mean anything.
    ready-to-paste `MAG_OFFSET = (...)` line.
 4. In your copy of the dashboard `code.py`, set `MAG_OFFSET` to those three
    numbers, then copy the file back onto the drive. It replaces the
-   calibration tool, and the compass now reads correctly. Optional: set
-   `MAG_HEADING_OFFSET` to your local magnetic declination so it shows true
-   north rather than magnetic north.
+   calibration tool. Then align the heading: point the CLUE and a phone
+   compass in the same direction, and add the difference, phone reading
+   minus CLUE reading, to `MAG_HEADING_OFFSET` in `code.py`.
 
-Each board needs its own offsets; numbers from one unit are likely incorrect
+Each board needs its own offsets; numbers from one unit are likely not to be correct
 on another.
 
 ## How the compass works
@@ -101,7 +103,7 @@ The main knobs, all named constants at the top of `code.py`:
 |---|---|
 | `TEMP_STOPS`, `HUM_STOPS`, `PRESS_STOPS` | The values where each colour sits |
 | `RAMP_COLORS`, `HUM_PRESS_COLORS` | The colours themselves, any RGB values, any count |
-| `MAG_OFFSET`, `MAG_HEADING_OFFSET` | Compass calibration and declination |
+| `MAG_OFFSET`, `MAG_HEADING_OFFSET` | Compass calibration and heading alignment |
 | `LIGHT_DARK`, `LIGHT_BRIGHT` | Room-light levels for minimum and maximum backlight |
 | `SOUND_DB_OFFSET` | Shifts the dB scale; trim against a reference meter |
 | `TEMP_OFFSET` | Corrects the board's self-heating |

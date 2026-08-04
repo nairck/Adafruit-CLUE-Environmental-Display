@@ -101,12 +101,14 @@ ACC_G = 9.81         # m/s^2, gate reference for the gravity filter
 # offset vector competes with the roughly 16 uT horizontal Earth field at
 # this latitude, so the heading is meaningless without it.
 # MAG_HEADING_OFFSET is added to the final heading in degrees, wrapped mod
-# 360: use it to choose which board edge counts as forward, or to add the
-# local declination (about +15.3 deg East in Victoria, BC) so the display
-# reads true rather than magnetic bearings.
+# 360. It is the one alignment knob: point the board and a trusted compass
+# (a phone works) in the same direction, then add their difference,
+# reference minus displayed, to this constant. The single number absorbs
+# the magnetometer's mounting yaw, the choice of forward edge, and any
+# true-versus-magnetic difference in the reference.
 # ----------------------------------------------------------------------------
 MAG_OFFSET = (-6.83, 18.31, 23.68)   # uT, from the calibration tool
-MAG_HEADING_OFFSET = 15.3            # deg; includes the East declination
+MAG_HEADING_OFFSET = 160.0           # deg; set against a reference compass
 
 # ----------------------------------------------------------------------------
 # Screen-referenced heading. The compass forward axis follows the screen,
@@ -116,9 +118,9 @@ MAG_HEADING_OFFSET = 15.3            # deg; includes the East declination
 # of that axis is the direction the reader faces, and it is the same
 # whether the board lies flat like a hand compass or stands upright in
 # front of the eyes, blending smoothly between the two holds.
-# SCREEN_UP_R0 is the sensor-frame x, y of screen-up at display rotation 0;
-# if another unit ever reads a constant quarter turn off, permute this one
-# constant rather than MAG_HEADING_OFFSET.
+# SCREEN_UP_R0 is the sensor-frame x, y of screen-up at display rotation 0.
+# After changing display.rotation, verify the heading against a reference
+# compass and trim MAG_HEADING_OFFSET if needed.
 # ----------------------------------------------------------------------------
 SCREEN_UP_R0 = (-1.0, 0.0)
 
@@ -344,11 +346,12 @@ def get_heading(dt, ax, ay, az):
     updated only while |a| is within GRAV_TOL of 1 g, so shakes and swings
     do not masquerade as tilt. The hard-iron corrected, filtered field
     vector is projected onto the plane perpendicular to gravity through
-    east = u x m and north = east x u with u the unit up vector, and the
-    heading is the bearing of the FWD axis in that plane. The displayed
-    number is therefore the direction the reader faces, identical for a
-    flat hold and an upright hold and smooth in between; at display
-    rotation 90 with the board level it reduces exactly to atan2(mx, my).
+    east = m x u and north = u x east with u the unit up vector, and the
+    heading is the bearing of the FWD axis in that plane, increasing
+    clockwise like a compass. The displayed number is therefore the
+    direction the reader faces, identical for a flat hold and an upright
+    hold and smooth in between; at display rotation 90 with the board
+    level it reduces exactly to atan2(-mx, my).
     The bearing is undefined only when FWD itself goes vertical, attitudes
     45 degrees beyond flat that lie outside any reading hold. Filtering
     the components rather than the angle avoids any 0/360 wrap artifact.
@@ -385,12 +388,12 @@ def get_heading(dt, ax, ay, az):
     ux = grav_x / gn
     uy = grav_y / gn
     uz = grav_z / gn
-    ex = uy * filt_mz - uz * filt_my
-    ey = uz * filt_mx - ux * filt_mz
-    ez = ux * filt_my - uy * filt_mx
-    nx = ey * uz - ez * uy
-    ny = ez * ux - ex * uz
-    nz = ex * uy - ey * ux
+    ex = filt_my * uz - filt_mz * uy
+    ey = filt_mz * ux - filt_mx * uz
+    ez = filt_mx * uy - filt_my * ux
+    nx = uy * ez - uz * ey
+    ny = uz * ex - ux * ez
+    nz = ux * ey - uy * ex
     f_east = FWD[0] * ex + FWD[1] * ey + FWD[2] * ez
     f_north = FWD[0] * nx + FWD[1] * ny + FWD[2] * nz
     heading = (degrees(atan2(f_east, f_north)) + MAG_HEADING_OFFSET) % 360.0
