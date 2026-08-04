@@ -26,13 +26,7 @@ pressure, sound level, a working compass, motion, and brightness, all colour cod
 Plugged into a computer, the CLUE appears as a small USB drive named
 CIRCUITPY. There is no upload step: the board simply runs the file named
 `code.py` at the top level of that drive, and restarts on its own whenever
-that file changes. Since only one file can have that name, only one program
-is ever installed at a time, and this repository ships both of its programs
-already named `code.py`: the dashboard, kept both at the top level and in
-`dashboard/`, and the calibration tool in `calibration/`. Copying one onto
-the drive replaces the other, and nothing ever needs renaming. The
-`dashboard/` and `calibration/` folders sit side by side so either program
-is always one copy away; the top-level `code.py` is the same file as
+that file changes. The `dashboard/` and `calibration/` folders provide both programs; the top-level `code.py` is by default the same file as
 `dashboard/code.py`.
 
 ```
