@@ -56,6 +56,7 @@ HUM_STOPS = (0.0, 10.0, 60.0, 100.0)        # %RH
 PRESS_STOPS = (97.0, 101.0, 102.0, 103.0)   # kPa
 
 SKY_BLUE = (0, 191, 255)   # deep sky blue: ramps, Dir line, default colour
+GREEN = (0, 255, 0)   # acceleration header and components lines
 
 RAMP_COLORS = (
     (255, 255, 255),   # white
@@ -202,7 +203,9 @@ clue_display[HUM_NUM_LOC].scale = NUM_SCALE
 clue_display[PRESS_LOC].scale = LINE_SCALE
 clue_display[BRIGHT_LOC].scale = LINE_SCALE
 clue_display[LOUD_LOC].scale = LINE_SCALE
+clue_display[ACC_HDR_LOC].color = GREEN
 clue_display[ACC_HDR_LOC].scale = LINE_SCALE
+clue_display[ACC_LOC].color = GREEN
 clue_display[ACC_LOC].scale = LINE_SCALE
 
 # Explicit pixel positions, one line each, independently adjustable.
@@ -270,6 +273,15 @@ def set_color(idx, color):
 
 def clamp(x, lo, hi):
     return lo if x < lo else hi if x > hi else x
+
+
+def acc_text(v):
+    """One signed acceleration component, always six characters wide:
+    three decimals below 10, two at or above. The switch sits at 9.9995,
+    where the three-decimal form rounds to 10.000."""
+    if -9.9995 < v < 9.9995:
+        return "{:+.3f}".format(v)
+    return "{:+.2f}".format(v)
 
 
 def block_power(buf):
@@ -468,7 +480,7 @@ filt_ax, filt_ay, filt_az = ax, ay, az
 amag = sqrt(filt_ax * filt_ax + filt_ay * filt_ay + filt_az * filt_az)
 fmt = "Acceleration ({:.2f})" if amag >= 9.9995 else "Acceleration ({:.3f})"
 set_text(ACC_HDR_LOC, fmt.format(amag))
-set_text(ACC_LOC, "{:.3f};{:.3f};{:.3f}".format(filt_ax, filt_ay, filt_az))
+set_text(ACC_LOC, acc_text(filt_ax) + ";" + acc_text(filt_ay) + ";" + acc_text(filt_az))
 
 display.auto_refresh = False
 
@@ -560,7 +572,7 @@ while True:
         amag = sqrt(filt_ax * filt_ax + filt_ay * filt_ay + filt_az * filt_az)
         fmt = "Acceleration ({:.2f})" if amag >= 9.9995 else "Acceleration ({:.3f})" # from 9.9995 the 3 dp form rounds to "10.000" and would overflow
         dirty |= set_text(ACC_HDR_LOC, fmt.format(amag))
-        dirty |= set_text(ACC_LOC, "{:.3f};{:.3f};{:.3f}".format(filt_ax, filt_ay, filt_az))
+        dirty |= set_text(ACC_LOC, acc_text(filt_ax) + ";" + acc_text(filt_ay) + ";" + acc_text(filt_az))
         dirty |= set_text(MAG_LOC, "  {} ({:.0f})".format(cardinal, heading))
         pct = bright_now * 100.0
         fmt = ("Brightness: {:.3f} %" if pct < 9.9995 else
